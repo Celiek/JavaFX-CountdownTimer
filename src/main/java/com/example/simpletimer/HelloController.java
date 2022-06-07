@@ -9,23 +9,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+//Kolory
+//C5E063
+//4AAD52
+//507255
+
 public class HelloController implements Initializable {
 
-    @FXML
-    private AnchorPane MenuPane;
-
-    @FXML
-    private Text SecoundsTimer;
-
-    @FXML
-    private Button cancelButton;
 
     @FXML
     private ComboBox<Integer> hoursInput;
@@ -34,21 +30,34 @@ public class HelloController implements Initializable {
     private Text hoursTimer;
 
     @FXML
+    private GridPane menuPane;
+
+    @FXML
     private ComboBox<Integer> minutesInput;
+
+    @FXML
+    private Text minutesTImer;
 
     @FXML
     private Text minutesTimer;
 
     @FXML
-    private ComboBox<Integer> secoundInput;
+    private Button resetButton;
 
     @FXML
-    private AnchorPane timerPane;
+    private ComboBox<Integer> secondsInput;
 
     @FXML
-    void restartTimer(ActionEvent event) {
+    private Button startButton;
+
+    @FXML
+    private GridPane timerPane;
+
+    @FXML
+    void reset(ActionEvent event) {
         scrollDOWN();
     }
+
 
     @FXML
     void start(ActionEvent event){
@@ -57,19 +66,19 @@ public class HelloController implements Initializable {
     }
 
     void scrollUP(){
-        TranslateTransition trl = new TranslateTransition();
-        trl.setDuration(Duration.millis(100));
-        trl.setToX(0);
-        trl.setToY(-200);
-        trl.setNode(MenuPane);
+        TranslateTransition tr1 = new TranslateTransition();
+        tr1.setDuration(Duration.millis(100));
+        tr1.setToX(0);
+        tr1.setToY(-200);
+        tr1.setNode(menuPane);
         TranslateTransition tr2 = new TranslateTransition();
         tr2.setDuration(Duration.millis(100));
         tr2.setFromX(0);
         tr2.setFromY(200);
         tr2.setToX(0);
         tr2.setToY(0);
-        trl.setNode(timerPane);
-        ParallelTransition pt = new ParallelTransition(trl ,tr2);
+        tr1.setNode(timerPane);
+        ParallelTransition pt = new ParallelTransition(tr1 ,tr2);
         pt.play();
 
     }
@@ -86,7 +95,7 @@ public class HelloController implements Initializable {
         tr2.setFromY(-200);
         tr2.setToX(0);
         tr2.setToY(0);
-        trl.setNode(MenuPane);
+        trl.setNode(menuPane);
         ParallelTransition pt = new ParallelTransition(trl ,tr2);
         pt.play();
     }
@@ -108,7 +117,7 @@ public class HelloController implements Initializable {
         minutesInput.setItems(minutesAndSecondsList);
         minutesInput.setValue(0);
 
-        secoundInput.setItems(minutesAndSecondsList);
-        secoundInput.setValue(0);
+        secondsInput.setItems(minutesAndSecondsList);
+        secondsInput.setValue(0);
     }
 }
