@@ -7,30 +7,30 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 //Kolory
-//C5E063
-//4AAD52
-//507255
+//C5E063 - tekst
+//4AAD52 - guziki
+//507255 - tło
 
 public class HelloController implements Initializable {
-
 
     @FXML
     private ComboBox<Integer> hoursInput;
 
     @FXML
-    private Text hoursTimer;
+    private Text hoursTImer;
 
     @FXML
-    private GridPane menuPane;
+    private AnchorPane menuPane;
 
     @FXML
     private ComboBox<Integer> minutesInput;
@@ -39,69 +39,80 @@ public class HelloController implements Initializable {
     private Text minutesTImer;
 
     @FXML
-    private Text minutesTimer;
-
-    @FXML
     private Button resetButton;
 
     @FXML
     private ComboBox<Integer> secondsInput;
 
     @FXML
+    private Text secondsTImer;
+
+    @FXML
     private Button startButton;
 
     @FXML
-    private GridPane timerPane;
+    private AnchorPane timerPane;
 
     @FXML
     void reset(ActionEvent event) {
         scrollDOWN();
     }
 
-
     @FXML
     void start(ActionEvent event){
-        System.out.println("ZOSTAŁEM WCIŚNIĘTY");
+//        System.out.println("ZOSTAŁEM WCIŚNIĘTY");
         scrollUP();
     }
 
     void scrollUP(){
-        TranslateTransition tr1 = new TranslateTransition();
-        tr1.setDuration(Duration.millis(100));
+        TranslateTransition tr1 = new TranslateTransition(Duration.millis(100) , menuPane);
         tr1.setToX(0);
         tr1.setToY(-200);
-        tr1.setNode(menuPane);
-        TranslateTransition tr2 = new TranslateTransition();
-        tr2.setDuration(Duration.millis(100));
+        tr1.play();
+
+        TranslateTransition tr2 = new TranslateTransition(Duration.millis(100) , timerPane);
         tr2.setFromX(0);
         tr2.setFromY(200);
         tr2.setToX(0);
         tr2.setToY(0);
-        tr1.setNode(timerPane);
-        ParallelTransition pt = new ParallelTransition(tr1 ,tr2);
-        pt.play();
+        tr2.play();
 
     }
 
     void scrollDOWN(){
-        TranslateTransition trl = new TranslateTransition();
-        trl.setDuration(Duration.millis(100));
-        trl.setToX(0);
-        trl.setToY(200);
-        trl.setNode(timerPane);
-        TranslateTransition tr2 = new TranslateTransition();
-        tr2.setDuration(Duration.millis(100));
+//        TranslateTransition trl = new TranslateTransition();
+//        trl.setDuration(Duration.millis(100));
+//        trl.setToX(0);
+//        trl.setToY(200);
+//        trl.setNode(timerPane);
+//        TranslateTransition tr2 = new TranslateTransition();
+//        tr2.setDuration(Duration.millis(100));
+//        tr2.setFromX(0);
+//        tr2.setFromY(-200);           ≥
+//        tr2.setToX(0);
+//        tr2.setToY(0);
+//        trl.setNode(menuPane);
+//        ParallelTransition pt = new ParallelTransition(trl ,tr2);
+//        pt.play();
+        TranslateTransition tr1 = new TranslateTransition(Duration.millis(100) , timerPane);
+        TranslateTransition tr2 = new TranslateTransition(Duration.millis(100) , menuPane);
+        tr1.setByX(0);
+        tr1.setByY(200);
+        tr1.play();
+        tr1.setNode(timerPane);
+
         tr2.setFromX(0);
-        tr2.setFromY(-200);
+        tr2.setFromY(200);
         tr2.setToX(0);
         tr2.setToY(0);
-        trl.setNode(menuPane);
-        ParallelTransition pt = new ParallelTransition(trl ,tr2);
-        pt.play();
+        tr2.setNode(menuPane);
+        tr2.play();
+
+
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(URL arg0, ResourceBundle arg1) {
         ObservableList<Integer> hoursList = FXCollections.observableArrayList();
         ObservableList<Integer> minutesAndSecondsList = FXCollections.observableArrayList();
 
