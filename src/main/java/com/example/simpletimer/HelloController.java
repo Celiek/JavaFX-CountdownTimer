@@ -1,25 +1,26 @@
 package com.example.simpletimer;
-
-import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 
 //Kolory
 //C5E063 - tekst
 //4AAD52 - guziki
 //507255 - tło
+//aktualna minuta filmu 16:51
 
 public class HelloController implements Initializable {
 
@@ -53,14 +54,69 @@ public class HelloController implements Initializable {
     @FXML
     private AnchorPane timerPane;
 
+    Map<Integer , String> numberMap;
+
+    Integer currseconds;
+    Thread thrd;
+
+     Integer hmsToSeconds(Integer h, Integer m , Integer s){
+        Integer htoSeconds = h*360;
+        Integer mtoSeconds = m * 60;
+         return htoSeconds + mtoSeconds + s;
+     }
+
+     LinkedList<Integer> secondsToHms(Integer currseconds){
+         Integer hours = currseconds / 3600;
+         Integer minutes = currseconds / 60;
+         currseconds = currseconds % 3600;
+         Integer seconds = currseconds;
+         LinkedList<Integer> answear = new LinkedList<>();
+         answear.add(hours);
+         answear.add(minutes);
+         answear.add(seconds);
+        return answear;
+     }
+
     @FXML
     void reset(ActionEvent event) {
         scrollDOWN();
+        thrd.stop();
     }
+
+    void startCountDown(){
+        thrd = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while(true){
+                        setOutput();
+                        if(currseconds == 0 ){
+                            System.out.println("Finished");
+                            scrollDOWN();
+                        }
+                        currseconds -=1;
+                        Thread.sleep(1000);
+                    }
+                } catch (Exception e){
+                    //TODO handle exception
+                }
+            }
+        });
+        thrd.start();
+    }
+
+    void setOutput(){
+         LinkedList<Integer> currHms = secondsToHms(currseconds);
+         System.out.println(currHms.get(0) + "." + currHms.get(1) + "." + currHms.get(2));
+    }
+
 
     @FXML
     void start(ActionEvent event){
-//        System.out.println("ZOSTAŁEM WCIŚNIĘTY");
+        currseconds = hmsToSeconds(hoursInput.getValue(),minutesInput.getValue(), secondsInput.getValue());
+        hoursInput.setValue(0);
+        minutesInput.setValue(0);
+        secondsInput.setValue(0);
         scrollUP();
     }
 
@@ -75,25 +131,19 @@ public class HelloController implements Initializable {
         tr2.setFromY(200);
         tr2.setToX(0);
         tr2.setToY(0);
+        tr1.setOnFinished(e -> {
+            try{
+                System.out.println("Started countdown");
+            } catch (Exception e2){
+            //todo catch exceptions
+            }
+        });
         tr2.play();
 
     }
 
     void scrollDOWN(){
-//        TranslateTransition trl = new TranslateTransition();
-//        trl.setDuration(Duration.millis(100));
-//        trl.setToX(0);
-//        trl.setToY(200);
-//        trl.setNode(timerPane);
-//        TranslateTransition tr2 = new TranslateTransition();
-//        tr2.setDuration(Duration.millis(100));
-//        tr2.setFromX(0);
-//        tr2.setFromY(-200);           ≥
-//        tr2.setToX(0);
-//        tr2.setToY(0);
-//        trl.setNode(menuPane);
-//        ParallelTransition pt = new ParallelTransition(trl ,tr2);
-//        pt.play();
+
         TranslateTransition tr1 = new TranslateTransition(Duration.millis(100) , timerPane);
         TranslateTransition tr2 = new TranslateTransition(Duration.millis(100) , menuPane);
         tr1.setByX(0);
@@ -108,6 +158,13 @@ public class HelloController implements Initializable {
         tr2.setNode(menuPane);
         tr2.play();
 
+        tr2.setOnFinished(e -> {
+            try{
+                thrd.stop();
+            } catch (Exception e2){
+                //TODO cath an exception
+            }
+        });
 
     }
 
@@ -117,7 +174,7 @@ public class HelloController implements Initializable {
         ObservableList<Integer> minutesAndSecondsList = FXCollections.observableArrayList();
 
         for (int i = 0; i <= 60; i++) {
-            if(0 <= i && i <= 24){
+            if(i <= 24){
                 hoursList.add(i);
             }
             minutesAndSecondsList.add(i);
@@ -130,5 +187,16 @@ public class HelloController implements Initializable {
 
         secondsInput.setItems(minutesAndSecondsList);
         secondsInput.setValue(0);
+
+        numberMap = new TreeMap<Integer , String>();
+
+        for (int i = 0; i <=60 ; i++) {
+            if(i<=9){
+                numberMap.put(i , "0" + String.valueOf(i));
+            } else {
+                numberMap.put(i , String.valueOf(i));
+            }
+        }
+
     }
 }
