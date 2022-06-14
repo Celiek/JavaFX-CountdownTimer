@@ -90,12 +90,14 @@ public class HelloController implements Initializable {
                 try {
                     while(true){
                         setOutput();
+                        setOutput();
+                        Thread.sleep(1000);
                         if(currseconds == 0 ){
-                            System.out.println("Finished");
+                            //System.out.println("Finished");
                             scrollDOWN();
+                            thrd.stop();
                         }
                         currseconds -=1;
-                        Thread.sleep(1000);
                     }
                 } catch (Exception e){
                     //TODO handle exception
@@ -107,7 +109,10 @@ public class HelloController implements Initializable {
 
     void setOutput(){
          LinkedList<Integer> currHms = secondsToHms(currseconds);
-         System.out.println(currHms.get(0) + "." + currHms.get(1) + "." + currHms.get(2));
+         hoursTImer.setText(numberMap.get(currHms.get(0)));
+         minutesTImer.setText(numberMap.get(currHms.get(1)));
+         secondsTImer.setText(numberMap.get(currHms.get(2)));
+         //System.out.println(currHms.get(0) + "." + currHms.get(1) + "." + currHms.get(2));
     }
 
 
@@ -134,6 +139,7 @@ public class HelloController implements Initializable {
         tr1.setOnFinished(e -> {
             try{
                 System.out.println("Started countdown");
+                startCountDown();
             } catch (Exception e2){
             //todo catch exceptions
             }
@@ -158,13 +164,13 @@ public class HelloController implements Initializable {
         tr2.setNode(menuPane);
         tr2.play();
 
-        tr2.setOnFinished(e -> {
-            try{
-                thrd.stop();
-            } catch (Exception e2){
-                //TODO cath an exception
-            }
-        });
+//    `    tr2.setOnFinished(e -> {
+//            try{
+//                thrd.stop();
+//            } catch (Exception e2){
+//                //TODO cath an exception
+//            }
+//        });`
 
     }
 
