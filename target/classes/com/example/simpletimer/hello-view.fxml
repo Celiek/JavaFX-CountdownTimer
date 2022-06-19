@@ -91,7 +91,7 @@
                                                 </AnchorPane>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                                     <children>
-                                                        <Text fx:id="secoundsTImer" layoutX="22.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00">
+                                                        <Text fx:id="secondsTImer" layoutX="22.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00">
                                                             <font>
                                                                 <Font size="96.0" />
                                                             </font>

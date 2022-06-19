@@ -40,16 +40,10 @@ public class HelloController implements Initializable {
     private Text minutesTImer;
 
     @FXML
-    private Button resetButton;
-
-    @FXML
     private ComboBox<Integer> secondsInput;
 
     @FXML
     private Text secondsTImer;
-
-    @FXML
-    private Button startButton;
 
     @FXML
     private AnchorPane timerPane;
@@ -62,19 +56,20 @@ public class HelloController implements Initializable {
      Integer hmsToSeconds(Integer h, Integer m , Integer s){
         Integer htoSeconds = h*360;
         Integer mtoSeconds = m * 60;
-         return htoSeconds + mtoSeconds + s;
+        return htoSeconds + mtoSeconds + s;
      }
 
      LinkedList<Integer> secondsToHms(Integer currseconds){
          Integer hours = currseconds / 3600;
-         Integer minutes = currseconds / 60;
          currseconds = currseconds % 3600;
+         Integer minutes = currseconds / 60;
+         currseconds = currseconds % 60;
          Integer seconds = currseconds;
-         LinkedList<Integer> answear = new LinkedList<>();
-         answear.add(hours);
-         answear.add(minutes);
-         answear.add(seconds);
-        return answear;
+         LinkedList<Integer> answer = new LinkedList<>();
+         answer.add(hours);
+         answer.add(minutes);
+         answer.add(seconds);
+        return answer;
      }
 
     @FXML
@@ -89,7 +84,6 @@ public class HelloController implements Initializable {
             public void run() {
                 try {
                     while(true){
-                        setOutput();
                         setOutput();
                         Thread.sleep(1000);
                         if(currseconds == 0 ){
@@ -112,13 +106,13 @@ public class HelloController implements Initializable {
          hoursTImer.setText(numberMap.get(currHms.get(0)));
          minutesTImer.setText(numberMap.get(currHms.get(1)));
          secondsTImer.setText(numberMap.get(currHms.get(2)));
-         //System.out.println(currHms.get(0) + "." + currHms.get(1) + "." + currHms.get(2));
+         System.out.println(currHms.get(0) + ":" + currHms.get(1) + ":" + currHms.get(2));
     }
 
 
     @FXML
     void start(ActionEvent event){
-        currseconds = hmsToSeconds(hoursInput.getValue(),minutesInput.getValue(), secondsInput.getValue());
+        currseconds = hmsToSeconds(hoursInput.getValue(), minutesInput.getValue(), secondsInput.getValue());
         hoursInput.setValue(0);
         minutesInput.setValue(0);
         secondsInput.setValue(0);
@@ -138,7 +132,7 @@ public class HelloController implements Initializable {
         tr2.setToY(0);
         tr1.setOnFinished(e -> {
             try{
-                System.out.println("Started countdown");
+                //System.out.println("Started countdown");
                 startCountDown();
             } catch (Exception e2){
             //todo catch exceptions
@@ -164,7 +158,7 @@ public class HelloController implements Initializable {
         tr2.setNode(menuPane);
         tr2.play();
 
-//    `    tr2.setOnFinished(e -> {
+//        tr2.setOnFinished(e -> {
 //            try{
 //                thrd.stop();
 //            } catch (Exception e2){
@@ -196,7 +190,7 @@ public class HelloController implements Initializable {
 
         numberMap = new TreeMap<Integer , String>();
 
-        for (int i = 0; i <=60 ; i++) {
+        for (Integer i = 0; i <=60 ; i++) {
             if(i<=9){
                 numberMap.put(i , "0" + String.valueOf(i));
             } else {
