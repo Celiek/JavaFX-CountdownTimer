@@ -54,9 +54,10 @@ public class HelloController implements Initializable {
     Thread thrd;
 
      Integer hmsToSeconds(Integer h, Integer m , Integer s){
-        Integer htoSeconds = h*360;
+        Integer htoSeconds = h * 3600;
         Integer mtoSeconds = m * 60;
-        return htoSeconds + mtoSeconds + s;
+        Integer total = htoSeconds + mtoSeconds + s;
+        return total;
      }
 
      LinkedList<Integer> secondsToHms(Integer currseconds){
@@ -174,7 +175,7 @@ public class HelloController implements Initializable {
         ObservableList<Integer> minutesAndSecondsList = FXCollections.observableArrayList();
 
         for (int i = 0; i <= 60; i++) {
-            if(i <= 24){
+            if(0 <= i && i <= 24){
                 hoursList.add(i);
             }
             minutesAndSecondsList.add(i);
